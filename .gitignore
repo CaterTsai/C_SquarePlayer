@@ -77,3 +77,9 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/obj/Debug
+/.vs/C_SquarePlayer/v14
+/bin
+/C_SquarePlayer.VC.db
+/C_SquarePlayer.VC.VC.opendb
+/C_SquarePlayer.vcxproj.user
