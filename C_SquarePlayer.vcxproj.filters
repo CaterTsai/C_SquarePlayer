@@ -34,6 +34,12 @@
     <ClCompile Include="src\audioSet.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\sender.cpp">
+      <Filter>src\lightCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lightCtrl.cpp">
+      <Filter>src\lightCtrl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -56,6 +62,9 @@
     </Filter>
     <Filter Include="addons\ofxXmlSettings\libs">
       <UniqueIdentifier>{687714A8-1662-FA1C-261F-50F0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\lightCtrl">
+      <UniqueIdentifier>{bab13e85-b5c5-4e27-a9d6-4a697f202a51}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +100,15 @@
     </ClInclude>
     <ClInclude Include="src\constParameter.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sender.h">
+      <Filter>src\lightCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lightStruct.h">
+      <Filter>src\lightCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lightCtrl.h">
+      <Filter>src\lightCtrl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

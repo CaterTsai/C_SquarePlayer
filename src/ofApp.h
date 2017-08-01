@@ -2,6 +2,8 @@
 
 #include "constParameter.h"
 #include "audioSet.h"
+#include "lightCtrl.h"
+
 
 class ofApp : public ofBaseApp{
 
@@ -17,5 +19,13 @@ public:
 private:
 	int _playIndex;
 	vector<audioSet> _audioSets;
+
+#pragma region light
+public:
+	void setupLight();
+
+private:
+	lightCtrl _lightCtrl;
+#pragma endregion
 
 };

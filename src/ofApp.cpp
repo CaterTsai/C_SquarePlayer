@@ -5,6 +5,7 @@ void ofApp::setup(){
 	
 	_playIndex = -1;
 	initAudio();
+	setupLight();
 	ofBackground(0);
 }
 
@@ -46,6 +47,7 @@ void ofApp::keyPressed(int key)
 		_audioSets[_playIndex].stop();
 		_playIndex = (_playIndex + 1) % _audioSets.size();
 		_audioSets[_playIndex].play();
+		_lightCtrl.setType(_playIndex);
 	}
 }
 
@@ -67,4 +69,13 @@ void ofApp::initAudio()
 		_audioSets[0].play();
 		_playIndex = 0;
 	}
+}
+
+//--------------------------------------------------------------
+void ofApp::setupLight()
+{
+	sender::GetInstance()->addServer(eLightType::eFrontLeftS, "127.0.0.1", 11999);
+
+	_lightCtrl.enable();
+	_lightCtrl.setType(_playIndex);
 }
