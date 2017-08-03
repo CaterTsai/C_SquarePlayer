@@ -3,15 +3,49 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	
+	loadConfig();
 	_playIndex = -1;
 	initAudio();
 	setupLight();
 	ofBackground(0);
+
+	_isIdle = true;
+	_changeTimer = _exChangeTime;
+	_idleTimer = _exIdleAnimTime;
+	_timer = ofGetElapsedTimef();
 }
 
 //--------------------------------------------------------------
-void ofApp::update(){
+void ofApp::update()
+{
+	float delta = ofGetElapsedTimef() - _timer;
+	_timer += delta;
 
+	_changeTimer -= delta;
+	if (_changeTimer <= 0)
+	{
+		change();
+		_changeTimer = _exChangeTime;
+	}
+
+	_idleTimer -= delta;
+	if (!_isIdle)
+	{
+		//Check Idle		
+		if (_idleTimer < 0)
+		{
+			_isIdle = true;
+			_idleTimer = _exIdleAnimTime;
+		}
+	}
+	else
+	{
+		if (_idleTimer < 0)
+		{
+			_lightCtrl.idleLight();
+			_idleTimer = _exIdleAnimTime;
+		}
+	}
 }
 
 //--------------------------------------------------------------
@@ -37,6 +71,12 @@ void ofApp::draw(){
 		_audioSets[_playIndex].isFXOn(i) ? ofSetColor(0, 100, 0) : ofSetColor(0, 255, 0);
 		ofDrawRectangle(pos.x - size * 0.5, pos.y - size * 0.5, size, size);
 	}
+
+	if (_isIdle)
+	{
+		ofSetColor(255, 255, 0);
+		ofDrawCircle(10, 10, 10);
+	}
 }
 
 //--------------------------------------------------------------
@@ -44,11 +84,20 @@ void ofApp::keyPressed(int key)
 {
 	if (key == 'n')
 	{
-		_audioSets[_playIndex].stop();
-		_playIndex = (_playIndex + 1) % _audioSets.size();
-		_audioSets[_playIndex].play();
-		_lightCtrl.setType(_playIndex);
+		change();
+		_changeTimer = _exChangeTime;
 	}
+	_isIdle = false;
+	_idleTimer = _exIdleTime;
+}
+
+//--------------------------------------------------------------
+void ofApp::change()
+{
+	_audioSets[_playIndex].stop();
+	_playIndex = (_playIndex + 1) % _audioSets.size();
+	_audioSets[_playIndex].play();
+	_lightCtrl.setType(_playIndex);
 }
 
 //--------------------------------------------------------------
@@ -74,8 +123,26 @@ void ofApp::initAudio()
 //--------------------------------------------------------------
 void ofApp::setupLight()
 {
-	sender::GetInstance()->addServer(eLightType::eFrontLeftS, "127.0.0.1", 11999);
+
+	sender::GetInstance()->add(eLightType::eFrontLeftS, _exSerialPort1, 115200);
+	sender::GetInstance()->add(eLightType::eFrontRightS, _exSerialPort2, 115200);
+	//sender::GetInstance()->add(eLightType::eFrontLeftS, "192.168.1.173", 11999);
 
 	_lightCtrl.enable();
 	_lightCtrl.setType(_playIndex);
+}
+
+//--------------------------------------------------------------
+void ofApp::loadConfig()
+{
+	ofxXmlSettings	_xml;
+	_xml.loadFile("_config.xml");
+
+	_exSerialPort1 = _xml.getValue("serial1", "", 0);
+	_exSerialPort2 = _xml.getValue("serial2", "", 0);
+
+	_exIdleTime = _xml.getValue("idleTime", 60, 0);
+	_exIdleAnimTime = _xml.getValue("idleAnimTime", 4, 0);
+	_exChangeTime = _xml.getValue("changeTime", 600, 0);
+
 }

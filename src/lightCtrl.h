@@ -20,6 +20,8 @@ public:
 	void keyPressed(ofKeyEventArgs &e);
 	void keyReleased(ofKeyEventArgs &e);
 
+	void idleLight();
+
 private:
 	void playEvent(int id);
 	void releaseEvent(int id);

@@ -1,19 +1,71 @@
 #include "sender.h"
 
 //--------------------------------------------------------------
-void sender::addServer(eLightType type, string ip, int port)
+#ifdef USE_NETWORK
+void sender::add(eLightType type, string ip, int port)
 {
-	if (_udp.find(type) != _udp.end())
+	if (_mgr.find(type) != _mgr.end())
 	{
-		ofLog(OF_LOG_ERROR, "[sender::addServer]Duplicate type");
+		ofLog(OF_LOG_ERROR, "[sender::add]Duplicate type");
 		return;
 	}
 
 	ofxUDPManager newUdp;
-	_udp.insert(make_pair(type, newUdp));
-	_udp[type].Create();
-	_udp[type].Connect(ip.c_str(), port);
-	_udp[type].SetNonBlocking(true);
+	_mgr.insert(make_pair(type, newUdp));
+	_mgr[type].Create();
+	_mgr[type].Connect(ip.c_str(), port);
+	_mgr[type].SetNonBlocking(true);
+}
+
+#else //USE_NETWORK
+//--------------------------------------------------------------
+void sender::add(eLightType type, string port, int baud)
+{
+	if (_mgr.find(type) != _mgr.end())
+	{
+		ofLog(OF_LOG_ERROR, "[sender::add]Duplicate type");
+		return;
+	}
+
+	if (port != "")
+	{
+		_mgr[type] = ofSerial();
+		_mgr[type].setup(port, baud);
+	}
+	
+	
+	
+}
+#endif //USE_NETWORK
+
+
+char sender::getCmd(eLightCtrl ctrl)
+{
+	char r = 't';
+	switch (ctrl)
+	{
+		case ePlayOne:
+		{
+			r = 't';
+			break;
+		}
+		case ePlayLoop:
+		{
+			r = 'p';
+			break;
+		}
+		case eStop:
+		{
+			r = 's';
+			break;
+		}
+		case eChangeColor:
+		{
+			r = 'c';
+			break;
+		}
+	}
+	return r;
 }
 
 

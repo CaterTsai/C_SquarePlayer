@@ -5,6 +5,18 @@ void lightCtrl::setType(int type)
 {
 	_type = type;
 	ZeroMemory(_fxCheck, cFXNum);
+
+	LChangeColor cc;
+	if (type == 0)
+	{
+		cc.color = ofColor(0, 255, 0);
+	}
+	else
+	{
+		cc.color = ofColor(0, 0, 255);
+	}
+
+	sender::GetInstance()->sendAll(cc);
 }
 
 //-------------------------------------
@@ -66,6 +78,15 @@ void lightCtrl::keyReleased(ofKeyEventArgs & e)
 }
 
 //-------------------------------------
+void lightCtrl::idleLight()
+{
+	LRunLineCenter data;
+	data.runType = 0;
+	data.time = 500;
+	sender::GetInstance()->sendAll(data);
+}
+
+//-------------------------------------
 void lightCtrl::playEvent(int id)
 {
 	if (_fxCheck[id])
@@ -80,15 +101,13 @@ void lightCtrl::playEvent(int id)
 		case 0:
 		{
 			LRunLine data;
-			cout << sizeof(LRunLine) << endl;
-			data.runType = 0;
+			data.runType = 1;
 			sender::GetInstance()->send(eFrontLeftS, data);
 			break;
 		}
 		case 1:
 		{
-			LRunLineCenter data;
-			
+			LRunLineCenter data;			
 			data.runType = 1;
 			sender::GetInstance()->sendAll(data);
 			break;
@@ -96,7 +115,7 @@ void lightCtrl::playEvent(int id)
 		case 2:
 		{
 			LRunLine data;
-			data.runType = 2;
+			data.runType = 3;
 			sender::GetInstance()->send(eFrontLeftS, data);
 			break;
 		}
@@ -108,22 +127,22 @@ void lightCtrl::playEvent(int id)
 		{
 		case 0:
 		{
-			LRunLine data;
-			data.runType = 0;
+			LFlash data;
+			data.time = 300;
 			sender::GetInstance()->send(eFrontLeftS, data);
 			break;
 		}
 		case 1:
 		{
-			LRunLineCenter data;
-			data.runType = 1;
+			LOpen data;
+			data.time = 500;
 			sender::GetInstance()->sendAll(data);
 			break;
 		}
 		case 2:
 		{
-			LRunLine data;
-			data.runType = 2;
+			LLineRandom data;
+			data.time = 400;
 			sender::GetInstance()->send(eFrontLeftS, data);
 			break;
 		}
