@@ -116,7 +116,7 @@ void lightCtrl::playEvent(int id)
 		{
 			LRunLine data;
 			data.runType = 3;
-			sender::GetInstance()->send(eFrontLeftS, data);
+			sender::GetInstance()->send(eFrontRightS, data);
 			break;
 		}
 		}
@@ -135,15 +135,15 @@ void lightCtrl::playEvent(int id)
 		case 1:
 		{
 			LOpen data;
-			data.time = 500;
+			data.time = 800;
 			sender::GetInstance()->sendAll(data);
 			break;
 		}
 		case 2:
 		{
-			LLineRandom data;
+			LFlash data;
 			data.time = 400;
-			sender::GetInstance()->send(eFrontLeftS, data);
+			sender::GetInstance()->send(eFrontRightS, data);
 			break;
 		}
 		}
